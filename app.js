@@ -60,13 +60,12 @@ const addTask = function () {
 
   //Append listItem to incompleteTaskHolder
   incompleteTaskHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskCompleted);
+  bindTaskEvents(listItem, toggleTaskStatus);
 
   taskInput.value = '';
 };
 
 //Edit an existing task.
-
 const editTask = function () {
   const listItem = this.parentNode;
 
@@ -74,6 +73,7 @@ const editTask = function () {
   const label = listItem.querySelector('label');
   const editBtn = listItem.querySelector('.edit');
   const containsClass = listItem.classList.contains('editMode');
+  
   //If class of the parent is .editmode
   if (containsClass) {
     //switch to .editmode
@@ -97,21 +97,19 @@ const deleteTask = function () {
   ul.removeChild(listItem);
 };
 
-//Mark task completed
-const taskCompleted = function () {
-  //Append the task list item to the #completed-tasks
+// Wrapper to toggle task status (moves to completed or incomplete)
+const toggleTaskStatus = function () {
   const listItem = this.parentNode;
-  completedTasksHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskIncomplete);
-};
-
-const taskIncomplete = function () {
-  //Mark task as incomplete.
-  //When the checkbox is unchecked
-  //Append the task list item to the #incompleteTasks.
-  const listItem = this.parentNode;
-  incompleteTaskHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskCompleted);
+  const isCompleted = listItem.parentNode === completedTasksHolder;
+  
+  if (isCompleted) {
+    incompleteTaskHolder.appendChild(listItem);
+  } else {
+    completedTasksHolder.appendChild(listItem);
+  }
+  
+  // After moving, we must re-bind the checkbox to point to the updated state
+  bindTaskEvents(listItem, toggleTaskStatus);
 };
 
 //The glue to hold it all together.
@@ -134,18 +132,16 @@ const bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
   checkBox.onchange = checkBoxEventHandler;
 };
 
-//cycle over incompleteTaskHolder ul list items
-//for each list item
-for (let i = 0; i < incompleteTaskHolder.children.length; i++) {
-  //bind events to list items chldren(tasksCompleted)
-  bindTaskEvents(incompleteTaskHolder.children[i], taskCompleted);
-}
+// Extract the loop logic to avoid duplication
+const bindEventsToTasks = function (taskHolder) {
+  for (let i = 0; i < taskHolder.children.length; i++) {
+    bindTaskEvents(taskHolder.children[i], toggleTaskStatus);
+  }
+};
 
-//cycle over completedTasksHolder ul list items
-for (let i = 0; i < completedTasksHolder.children.length; i++) {
-  //bind events to list items chldren(tasksIncompleted)
-  bindTaskEvents(completedTasksHolder.children[i], taskIncomplete);
-}
+// Bind events for both lists
+bindEventsToTasks(incompleteTaskHolder);
+bindEventsToTasks(completedTasksHolder);
 
 // Issues with usability don't get seen until they are in front of a human tester.
 
