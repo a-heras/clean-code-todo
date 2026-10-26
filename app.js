@@ -31,7 +31,7 @@ const setupTaskElement = function (taskElement, taskString) {
 
 const createNewTaskElement = function (taskString) {
   const taskElement = document.createElement('li');
-  
+
   const checkbox = document.createElement('input');
   const label = document.createElement('label');
   const textInput = document.createElement('input');
@@ -46,7 +46,7 @@ const createNewTaskElement = function (taskString) {
   taskElement.appendChild(textInput);
   taskElement.appendChild(editButton);
   taskElement.appendChild(deleteButton);
-  
+
   setupTaskElement(taskElement, taskString);
 
   return taskElement;
@@ -69,7 +69,7 @@ const editTask = function () {
   const label = taskElement.querySelector('label');
   const editButton = taskElement.querySelector('.edit');
   const isEditing = taskElement.classList.contains('editMode');
-  
+
   if (isEditing) {
     label.innerText = textInput.value;
     editButton.innerText = 'Edit';
@@ -90,13 +90,13 @@ const deleteTask = function () {
 const toggleTaskStatus = function () {
   const taskElement = this.parentNode;
   const isCompleted = taskElement.parentNode === completedTasksHolder;
-  
+
   if (isCompleted) {
     incompleteTaskHolder.appendChild(taskElement);
   } else {
     completedTasksHolder.appendChild(taskElement);
   }
-  
+
   bindTaskEvents(taskElement, toggleTaskStatus);
 };
 
