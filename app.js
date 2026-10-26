@@ -6,14 +6,14 @@ const addButton = document.getElementsByTagName('button')[0];
 const incompleteTaskHolder = document.getElementById('incompleteTasks');
 const completedTasksHolder = document.getElementById('completed-tasks');
 
-const createNewTaskElement = function (taskString) {
-  const taskElement = document.createElement('li');
-  const checkbox = document.createElement('input');
-  const label = document.createElement('label');
-  const textInput = document.createElement('input');
-  const editButton = document.createElement('button');
-  const deleteButton = document.createElement('button');
-  const deleteButtonImg = document.createElement('img');
+// Setup properties for task elements to keep the creation function clean
+const setupTaskElement = function (taskElement, taskString) {
+  const checkbox = taskElement.querySelector('input[type=checkbox]');
+  const label = taskElement.querySelector('label');
+  const textInput = taskElement.querySelector('input[type=text]');
+  const editButton = taskElement.querySelector('button.edit');
+  const deleteButton = taskElement.querySelector('button.delete');
+  const deleteButtonImg = deleteButton.querySelector('img');
 
   label.innerText = taskString;
   label.className = 'task';
@@ -27,6 +27,18 @@ const createNewTaskElement = function (taskString) {
 
   deleteButton.className = 'delete';
   deleteButtonImg.src = './remove.svg';
+};
+
+const createNewTaskElement = function (taskString) {
+  const taskElement = document.createElement('li');
+  
+  const checkbox = document.createElement('input');
+  const label = document.createElement('label');
+  const textInput = document.createElement('input');
+  const editButton = document.createElement('button');
+  const deleteButton = document.createElement('button');
+  const deleteButtonImg = document.createElement('img');
+
   deleteButton.appendChild(deleteButtonImg);
 
   taskElement.appendChild(checkbox);
@@ -35,6 +47,8 @@ const createNewTaskElement = function (taskString) {
   taskElement.appendChild(editButton);
   taskElement.appendChild(deleteButton);
   
+  setupTaskElement(taskElement, taskString);
+
   return taskElement;
 };
 
