@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -26,5 +27,9 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10"
+  },
+  "lint-staged": {
+    "*.js": "eslint",
+    "*.{html,css,json,md}": "prettier --check"
   }
 }
